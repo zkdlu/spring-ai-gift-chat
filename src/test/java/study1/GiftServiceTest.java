@@ -2,56 +2,42 @@ package study1;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.client.ChatClient;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GiftServiceTest {
 
-    private ChatClient spyChatClient;
-    private ChatClient.ChatClientRequestSpec spyPrompt;
+    private GiftChatClient spyChatClient;
     private GiftService sut;
 
     @BeforeEach
     void setUp() {
-        ChatClient.ChatClientRequestSpec spySystem = mock(ChatClient.ChatClientRequestSpec.class);
-
-        spyPrompt = mock(ChatClient.ChatClientRequestSpec.class);
-        given(spyPrompt.system(anyString())).willReturn(spySystem);
-
-        spyChatClient = mock(ChatClient.class);
-        given(spyChatClient.prompt()).willReturn(spyPrompt);
-
-        ChatClient.Builder mockChatClientBuilder = mock(ChatClient.Builder.class);
-        given(mockChatClientBuilder.build())
-                .willReturn(spyChatClient);
-
-        sut = new GiftService(mockChatClientBuilder);
+        spyChatClient = mock(GiftChatClient.class);
+        sut = new GiftService(spyChatClient);
     }
 
     @Test
-    void gift_callsPrompt_inChatClient() throws Exception {
+    void gift_callsChat_inChatClient() throws Exception {
         sut.gift("", "");
 
-        verify(spyChatClient).prompt();
+        verify(spyChatClient).chat(anyString(), anyString());
     }
 
     @Test
     void gift_passSystemPrompt_inChatClient() throws Exception {
         sut.gift("", "");
 
-        verify(spyChatClient.prompt()).system("당신은 선물 추천 도우미에요.");
+        verify(spyChatClient).chat(eq("당신은 선물 추천 도우미에요."), anyString());
     }
 
     @Test
     void gift_passMessage_inChatClient() throws Exception {
         sut.gift("친구 생일 선물 추천해 줘", "");
 
-        verify(spyPrompt.system(anyString())).user("친구 생일 선물 추천해 줘");
+        verify(spyChatClient).chat(anyString(), eq("친구 생일 선물 추천해 줘"));
     }
 
 }

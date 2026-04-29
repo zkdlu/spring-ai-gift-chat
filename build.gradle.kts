@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springaicommunity:claude-code-sdk:1.0.0")
     implementation(platform("org.springframework.ai:spring-ai-bom:1.1.2"))
     implementation("org.springframework.ai:spring-ai-starter-model-google-genai")
 
