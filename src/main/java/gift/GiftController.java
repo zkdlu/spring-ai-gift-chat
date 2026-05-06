@@ -1,6 +1,6 @@
 package gift;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -12,7 +12,7 @@ public class GiftController {
         this.giftService = giftService;
     }
 
-    @GetMapping("/api/chat")
+    @PostMapping("/api/chat")
     GiftResponse gift(String message, String sessionId) {
         return giftService.gift(message, sessionId);
     }
