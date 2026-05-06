@@ -3,6 +3,8 @@ package gift;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class GiftService {
 
@@ -13,6 +15,8 @@ public class GiftService {
     }
 
     public GiftResponse gift(String message, String sessionId) {
+        long st = System.nanoTime();
+
         ChatClient.ChatClientRequestSpec requestSpec = client.prompt()
                 .system("당신은 선물 추천 도우미에요.")
                 .user(message);
@@ -21,7 +25,10 @@ public class GiftService {
         String response = responseSpec.content();
 
         return new GiftResponse(
-                "requestId", response, String.valueOf(System.nanoTime())
+                UUID.randomUUID().toString(),
+                response,
+                String.valueOf(System.nanoTime() - st),
+                sessionId
         );
     }
 }
