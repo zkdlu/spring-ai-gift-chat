@@ -11,7 +11,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,27 +36,27 @@ class GiftControllerTest {
      */
     @Test
     void gift_returnsOkHttpStatus() throws Exception {
-        mockMvc.perform(get("/api/chat"))
+        mockMvc.perform(post("/api/chat"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void gift_callsGift_inGiftService() throws Exception {
-        mockMvc.perform(get("/api/chat"));
+        mockMvc.perform(post("/api/chat"));
 
         verify(spyGiftService).gift(any(), any());
     }
 
     @Test
     void gift_passMessage_inGiftService() throws Exception {
-        mockMvc.perform(get("/api/chat").param("message", "안녕하세요"));
+        mockMvc.perform(post("/api/chat").param("message", "안녕하세요"));
 
         verify(spyGiftService).gift(eq("안녕하세요"), any());
     }
 
     @Test
     void gift_passSessionId_inGiftService() throws Exception {
-        mockMvc.perform(get("/api/chat")
+        mockMvc.perform(post("/api/chat")
                 .param("message", "안녕하세요")
                 .param("sessionId", "sessionid")
         );
@@ -67,9 +67,9 @@ class GiftControllerTest {
     @Test
     void gift_returnsGiftResponse_inGiftService() throws Exception {
         given(spyGiftService.gift(any(), any()))
-                .willReturn(new GiftResponse("requestId", "message", "durationMs"));
+                .willReturn(new GiftResponse("requestId", "message", "durationMs", null));
 
-        mockMvc.perform(get("/api/chat"))
+        mockMvc.perform(post("/api/chat"))
                 .andExpect(jsonPath("$.requestId").value("requestId"))
                 .andExpect(jsonPath("$.message").value("message"))
                 .andExpect(jsonPath("$.durationMs").value("durationMs"));

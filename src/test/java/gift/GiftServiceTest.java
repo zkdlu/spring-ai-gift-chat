@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GiftServiceTest {
 
@@ -18,7 +17,12 @@ class GiftServiceTest {
 
     @BeforeEach
     void setUp() {
+        ChatClient.CallResponseSpec spyResponseSpec = mock(ChatClient.CallResponseSpec.class);
+
         ChatClient.ChatClientRequestSpec spySystem = mock(ChatClient.ChatClientRequestSpec.class);
+        given(spySystem.user(anyString())).willReturn(spySystem);
+        given(spySystem.call()).willReturn(spyResponseSpec);
+
 
         spyPrompt = mock(ChatClient.ChatClientRequestSpec.class);
         given(spyPrompt.system(anyString())).willReturn(spySystem);
