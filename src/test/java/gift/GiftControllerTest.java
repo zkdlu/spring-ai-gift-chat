@@ -67,7 +67,7 @@ class GiftControllerTest {
     @Test
     void gift_returnsGiftResponse_inGiftService() throws Exception {
         given(spyGiftService.gift(any(), any()))
-                .willReturn(new GiftResponse("requestId", "message", "durationMs", null));
+                .willReturn(new GiftResponse("requestId", "message", "durationMs", ""));
 
         mockMvc.perform(post("/api/chat"))
                 .andExpect(jsonPath("$.requestId").value("requestId"))
