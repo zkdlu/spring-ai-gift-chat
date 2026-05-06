@@ -1,4 +1,4 @@
-package study1;
+package gift;
 
 public record GiftResponse(
         String requestId,

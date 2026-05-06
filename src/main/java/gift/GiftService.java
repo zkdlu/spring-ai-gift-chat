@@ -1,4 +1,4 @@
-package study1;
+package gift;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
